@@ -119,7 +119,7 @@ const main = async () => {
   approvedUsers.add(event.sender.login);
   actions.info("Approved users:");
   for (const user of approvedUsers) {
-    actions.info(`- ${user}`);
+    actions.info(`- ${chalk.green(user)}`);
   }
 
   const scores = await core.checkReview(rules, approvedUsers);
@@ -129,15 +129,17 @@ const main = async () => {
   }
 
   const totalScore = scores.reduce((acc, { score }) => acc + score, 0);
-  actions.info(`Total score: ${totalScore}`);
-
   actions.setOutput("score", totalScore.toString());
 
   if (requiredScore === 0) {
+    actions.info(`Total score: ${totalScore}`);
+
     actions.info("Skipping check");
     actions.setOutput("result", "true");
     return;
   }
+
+  actions.info(`Total score: ${totalScore} / ${requiredScore}`);
 
   if (totalScore < requiredScore) {
     actions.setOutput("result", "false");
