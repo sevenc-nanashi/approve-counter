@@ -119,7 +119,7 @@ const main = async () => {
   approvedUsers.add(event.sender.login);
   actions.info("Approved users:");
   for (const user of approvedUsers) {
-    actions.info(`- ${chalk.green(user)}`);
+    actions.info(`  ${chalk.green(user)}`);
   }
 
   const scores = await core.checkReview(rules, approvedUsers);
