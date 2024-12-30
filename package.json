@@ -1,0 +1,26 @@
+{
+  "name": "approve-counter",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test --experimental-strip-types",
+    "build": "node --experimental-strip-types ./build.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "check": "pnpm run lint && pnpm run typecheck && pnpm run test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@actions/core": "^1.11.1",
+    "@biomejs/biome": "1.9.4",
+    "@octokit/types": "^13.6.2",
+    "@octokit/webhooks-types": "^7.6.1",
+    "@types/node": "^22.10.2",
+    "octokit": "^4.0.3",
+    "tsdown": "^0.5.3",
+    "typescript": "^5.7.2"
+  }
+}
