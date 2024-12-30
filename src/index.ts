@@ -141,13 +141,13 @@ const main = async () => {
 
   if (totalScore < requiredScore) {
     actions.setOutput("result", "false");
-    actions.info(styleText("red", "Failed"));
+    actions.info(chalk.red("Failed"));
     if (onFail === "fail") {
       throw new Error("Not enough score");
     }
   } else {
     actions.setOutput("result", "true");
-    actions.info(styleText("green", "Passed"));
+    actions.info(chalk.green("Passed"));
   }
 };
 
