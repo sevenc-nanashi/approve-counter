@@ -49,7 +49,7 @@ const main = async () => {
       throw new Error(`Invalid rule: ${rule}`);
     }
 
-    const target = match[1][0] === "@" ? "team" : "user";
+    const target = match[1][0] === "#" ? "team" : "user";
     const slug = match[1].slice(1).trim();
     const score = Number.parseInt(match[2].trim());
     if (Number.isNaN(score)) {
