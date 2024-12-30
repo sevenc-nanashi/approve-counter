@@ -1,8 +1,12 @@
-import { styleText } from "node:util";
+import { Chalk } from "chalk";
 import * as actions from "@actions/core";
 import type { Endpoints } from "@octokit/types";
 import { Octokit } from "octokit";
 import * as core from "./core.ts";
+
+const chalk = new Chalk({
+  level: 3,
+});
 
 const ruleLinePattern = /^([@#][^:]+):(.+)$/;
 type Team = Endpoints["GET /orgs/{org}/teams"]["response"]["data"][0];
@@ -89,12 +93,11 @@ const main = async () => {
     throw new Error("No rules found");
   }
 
-  console.log("Rules:");
+  actions.info("Rules:");
   for (const rule of rules) {
     const left = `${rule.target === "team" ? "#" : "@"}${rule.slug}`;
-    console.log(
-      `${styleText(
-        rule.target === "team" ? "blue" : "green",
+    actions.info(
+      `  ${chalk[rule.target === "team" ? "blue" : "green"](
         left,
       )}: ${rule.score}`,
     );
@@ -114,37 +117,37 @@ const main = async () => {
       .filter((login) => login != null),
   );
   approvedUsers.add(event.sender.login);
-  console.log("Approved users:");
+  actions.info("Approved users:");
   for (const user of approvedUsers) {
-    console.log(`- ${user}`);
+    actions.info(`- ${user}`);
   }
 
   const scores = await core.checkReview(rules, approvedUsers);
-  console.log("Scores:");
+  actions.info("Scores:");
   for (const { user, score } of scores) {
-    console.log(`${styleText("green", user)}: ${score}`);
+    actions.info(`  ${chalk.green(user)}: ${score}`);
   }
 
   const totalScore = scores.reduce((acc, { score }) => acc + score, 0);
-  console.log(`Total score: ${totalScore}`);
+  actions.info(`Total score: ${totalScore}`);
 
   actions.setOutput("score", totalScore.toString());
 
   if (requiredScore === 0) {
-    console.log("Skipping check");
+    actions.info("Skipping check");
     actions.setOutput("result", "true");
     return;
   }
 
   if (totalScore < requiredScore) {
     actions.setOutput("result", "false");
-    console.log(styleText("red", "Failed"));
+    actions.info(styleText("red", "Failed"));
     if (onFail === "fail") {
       throw new Error("Not enough score");
     }
   } else {
     actions.setOutput("result", "true");
-    console.log(styleText("green", "Passed"));
+    actions.info(styleText("green", "Passed"));
   }
 };
 

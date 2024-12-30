@@ -1,6 +1,11 @@
-import * as tsdown from "tsdown";
+import * as rolldown from "rolldown";
 
-tsdown.build({
-  entry: "src/index.ts",
-  outDir: "dist",
+await rolldown.build({
+  input: "src/index.ts",
+  platform: "node",
+  output: {
+    dir: "dist",
+    minify: true,
+  },
+  treeshake: true,
 });
